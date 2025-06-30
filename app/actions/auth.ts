@@ -52,14 +52,21 @@ export async function authorizeUser (email:string ,password:string)
         throw new Error("Length of password must be atleast 8 letters");
     }
     try{
-        const res  = await fetch(`https://68624c9896f0cc4e34b91e08.mockapi.io/api/users`,{
-            method:"POST",
+        const res  = await fetch(`https://68624c9896f0cc4e34b91e08.mockapi.io/api/users?email=${email}&password=${password}`,{
+            method:"GET",
             headers:{
                 "Content-Type":"application/json"
             },
-            body:JSON.stringify({email,password})
+
         }) ;
-        const user = res.json();
+        const user = await res.json();
+        if (!res.ok || user.length === 0) {
+            return null;
+          }
+     
+      
+        return user;
+
           
     }catch(err)
     {
